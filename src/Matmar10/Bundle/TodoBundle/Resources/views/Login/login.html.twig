@@ -1,0 +1,33 @@
+{% extends 'Matmar10TodoBundle::layout.html.twig' %}
+
+{% block headExtra %}
+{% endblock headExtra %}
+
+
+{% block content %}
+<div class="container">
+    <section>
+        <div class="row-fluid">
+            <div class="span12">
+                <h1>Howdy.</h1>
+                <h2>I didn't catch yer name, stranger.</h2>
+                <div class="alert alert-info alert-block">
+                    <h3>Login with Twitter to get started.</h3>
+                    <p>{% raw %}If you're new around these parts, we'll create a new account for you automatically. {% endraw %}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="row-fluid">
+            <div class="span12 text-center">
+                <p>
+                    <a href="{{ path('login_attempt_twitter') }}" class="btn btn-primary btn-large"><i class="icon-twitter"></i> Register or Log-in with Twitter</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock content %}

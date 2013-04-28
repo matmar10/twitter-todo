@@ -1,0 +1,9 @@
+
+# default:
+#    pattern:  /
+#    defaults: { _controller: Matmar10TodoBundle:Landing:index }
+
+matmar10_todo:
+    resource: "@Matmar10TodoBundle/Controller"
+    type:     annotation
+

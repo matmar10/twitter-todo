@@ -1,0 +1,65 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+
+    <title>{% block title %}MatMar10 TODO Demo{% endblock title %}</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {# <link href="{{ asset('bundles/matmar10todo/vendor/bootstrap/2.3.1/css/bootstrap.min.css') }}" rel="stylesheet" media="screen"> #}
+    <link href="{{ asset('bundles/matmar10todo/vendor/bootswatch/2.3.1/bootstrap.min.css') }}" rel="stylesheet" media="screen">
+
+    <link href="{{ asset('bundles/matmar10todo/vendor/font-awesome/3.0.2/css/font-awesome.min.css') }}" rel="stylesheet" media="screen">
+    <!--[if IE 7]>
+    <link href="{{ asset('bundles/matmar10todo/vendor/font-awesome/3.0.2/css/font-awesome-ie7.min.css') }}" rel="stylesheet">
+    <![endif]-->
+
+    <link href="{{ asset('bundles/matmar10todo/src/css/app.css') }}" rel="stylesheet" media="screen">
+
+    {% block headExtra %}
+    {% endblock headExtra %}
+</head>
+<body>
+
+{% block header %}
+    <header>
+    {% block mainMenu %}
+        <div class="navbar navbar-static-top">
+            <div class="navbar-inner">
+                <div class="container">
+                    <a class="brand" href="{{ path('homepage') }}">Matmar10 Task List</a>
+                    {% if menuItems is defined %}
+                    <ul class="nav" id="main-menu-left">
+                        {% for path_id, display_name in menuItems %}
+                        <li><a href="{{ path(path_id)}}">{{ display_name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+         </div>
+    {% endblock mainMenu %}
+    </header>
+{% endblock header %}
+
+    {% block content %}
+    {% endblock content %}
+
+    {% block javascript %}
+    <!-- vendor script includes -->
+    <script src="{{ asset('bundles/matmar10todo/vendor/jquery/1.9.1/jquery.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/matmar10todo/vendor/jquery-color/2.1.1/jquery.color.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/matmar10todo/vendor/bootstrap/2.3.1/js/bootstrap.min.js') }}" type="text/javascript"></script>
+    {% endblock javascript %}
+
+    <!-- application -->
+    <script src="{{ asset('bundles/matmar10todo/src/js/app.js') }}" type="text/javascript"></script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+        });
+    </script>
+</body>
+</html>

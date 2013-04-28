@@ -1,0 +1,36 @@
+{% extends 'Matmar10TodoBundle::layout.html.twig' %}
+
+{% block headExtra %}
+{% endblock headExtra %}
+
+
+{% block content %}
+<div class="container">
+    <section>
+        <div class="row-fluid">
+            <div class="span12">
+                <h1>An error occurred</h1>
+                <h2>Oops, something went awry.</h2>
+                <div class="alert alert-warning alert-block">
+                    <h3>We were unable to process your Twitter Log-in</h3>
+                    <p>
+                        Something went wrong while trying to process your Twitter Log-in.
+                        Please try to Log-in again.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="row-fluid">
+            <div class="span12 text-center">
+                <p>
+                    <a href="{{ path('login_attempt_twitter') }}" class="btn btn-primary btn-large"><i class="icon-twitter"></i> Register or Sign-in with Twitter</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+</div>
+{% endblock content %}

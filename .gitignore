@@ -1,0 +1,16 @@
+
+
+# composer should be installed locally
+composer.phar
+
+# ignore IDE
+.idea
+
+# symfony framework files
+/web/bundles/
+/app/bootstrap*
+/app/cache/*
+/app/logs/*
+/vendor/
+/app/config/parameters.yml
+

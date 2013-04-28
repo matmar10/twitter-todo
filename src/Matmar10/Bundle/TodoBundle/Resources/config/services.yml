@@ -1,0 +1,18 @@
+
+parameters:
+    matmar10_todo.twitter_auth_service.class: Matmar10\Bundle\Todobundle\Service\TwitterAuthService
+    matmar10_todo.account_service.class: Matmar10\Bundle\Todobundle\Service\AccountService
+
+services:
+    matmar10_todo.twitter_auth_service:
+        class: %matmar10_todo.twitter_auth_service.class%
+        arguments:
+            - @doctrine
+            - https://api.twitter.com/oauth/authenticate
+
+
+    matmar10_todo.account_service:
+        class: %matmar10_todo.twitter_auth_service.class%
+        arguments:
+            - @fos_user.user_manager
+            - @doctrine
