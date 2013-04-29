@@ -1,4 +1,13 @@
 
-ul.messages {
-    overflow-y: auto;
+.done.false {
+    text-decoration: none;
+}
+
+.done.true {
+    text-decoration: line-through;
+    color: gray;
+}
+
+.hidden {
+    display: none;
 }

@@ -1,0 +1,18 @@
+
+<div ng:controller="TodoController">
+
+    <input type="text" name="todoText" placeholder="enter your todo here" ng-model="todoText" />
+    <button ng:click="addTodo()">Add Task</button>
+
+    <br/>
+
+    <label>{{remaining}} remaining</label>
+    <button ng:click="removeDone()">remove done</button><br/>
+    <ul ng:repeat="todo in todos">
+        <li>
+            <input type="checkbox" name="todo.done" ng:click="recalc()">
+            <!-- updates the css class to done_true or done_false -->
+            <span ng:class="'done_' + todo.done">{{todo.text}}</span><br/>
+        </li>
+    </ul>
+</div>

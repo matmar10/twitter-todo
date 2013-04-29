@@ -1,8 +1,71 @@
 {% extends 'Matmar10TodoBundle::layout.html.twig' %}
 
 {% block headExtra %}
+    <link href="{{ asset('bundles/matmar10todo/src/css/app.css') }}" rel="stylesheet" media="screen">
 {% endblock headExtra %}
 
 
 {% block content %}
+
+{% verbatim %}
+<div class="container" ng-controller="TodoController">
+
+    <div class="row-fluid">
+        <div class="span12">
+            <h1>Tweet Your Productivity</h1>
+            <div class="alert alert-info">
+                <strong> <i class="icon-warning-sign"></i> Important Note:</strong> Tasks will be automatically posted to your twitter when you check them off.
+            </div>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <h2>You have {{remaining}} left.</h2>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <div class="span12">
+            <form class="form form-inline">
+                <input class="span6" type="text" name="todoText" placeholder="Example: Meet the Shop Savvy team tomorrow." ng-model="todoText" />
+                <button class="btn btn-primary" ng-click="addTodo()">Add Task</button>
+            </form>
+        </div>
+    </div>
+    <div class="row-fluid" ng-class="{true: 'hidden'}[todos.length == 0]">
+        <div class="span12">
+            <ul class="unstyled" ng-repeat="todo in todos">
+                <li>
+                    <form class="form inline-form">
+                        <label ng-for="todo.id" ng-class="'checkbox done ' + todo.done">
+                            <input ng-id="todo.id" type="checkbox" name="done" ng-model="todo.done" ng-click="recalc()" />
+                            {{todo.text}}
+                        </label>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="row-fluid" ng-class="{true: 'hidden'}[todos.length == 0]">
+        <div class="span12">
+            <p>
+                <button class="btn btn-danger" ng-click="removeDone()">Clear Completed Tasks</button>
+            </p>
+        </div>
+    </div>
+    <div class="row-fluid" ng-class="{true: 'hidden'}[todos.length > 0]">
+        <div class="span12">
+            <div class="alert alert-success">
+                <h4><i class="icon-ok"></i> All tasks completed!</h4>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endverbatim %}
+
 {% endblock content %}
+
+{% block javasriptExtra %}
+    <script src="{{ asset('bundles/matmar10todo/vendor/angular/1.1.4/angular.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('bundles/matmar10todo/src/js/app.js') }}" type="text/javascript"></script>
+{% endblock javasriptExtra %}
