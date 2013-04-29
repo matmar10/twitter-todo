@@ -64,15 +64,7 @@ swiftmailer:
     password:  %mailer_password%
     spool:     { type: memory }
 
-#FOSUserBundle
-fos_user:
-    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
-    firewall_name: main
-    user_class: Matmar10\Bundle\TodoBundle\Entity\User
-
-#FOSTwitterBundle
-#fos_twitter:
-#      file: %kernel.root_dir%/../vendor/kertz/twitteroauth/twitteroauth/twitteroauth.php
-#      consumer_key: vdppViIZVmHZdFQaS4CzQ
-#      consumer_secret: UnNv6fRqTpvxX3Jv7z8sNWtLkkgGV40165ekgVzsTo
-#      callback_url: http://matmar10-todo.local/login-check
+# escape_wsse_authentication:
+#    authentication_provider_class: Escape\WSSEAuthenticationBundle\Security\Core\Authentication\Provider\Provider
+#    authentication_listener_class: Escape\WSSEAuthenticationBundle\Security\Http\Firewall\Listener
+#    authentication_entry_point_class: Escape\WSSEAuthenticationBundle\Security\Http\EntryPoint\EntryPoint

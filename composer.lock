@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "2edc862d5dbe3bc025c72129ce57f583",
+    "hash": "301790f47f5e36d25e8b44bbbce9e8e8",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -597,43 +597,36 @@
             "time": "2013-03-24 20:43:58"
         },
         {
-            "name": "friendsofsymfony/user-bundle",
+            "name": "escapestudios/wsse-authentication-bundle",
             "version": "dev-master",
-            "target-dir": "FOS/UserBundle",
+            "target-dir": "Escape/WSSEAuthenticationBundle",
             "source": {
                 "type": "git",
-                "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "4f5e0d23dd5e98cafa22b214cdb754566180ab94"
+                "url": "https://github.com/escapestudios/EscapeWSSEAuthenticationBundle.git",
+                "reference": "07b6c289735c0094833aa4f21f06975604e881e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/4f5e0d23dd5e98cafa22b214cdb754566180ab94",
-                "reference": "4f5e0d23dd5e98cafa22b214cdb754566180ab94",
+                "url": "https://api.github.com/repos/escapestudios/EscapeWSSEAuthenticationBundle/zipball/07b6c289735c0094833aa4f21f06975604e881e3",
+                "reference": "07b6c289735c0094833aa4f21f06975604e881e3",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2",
-                "symfony/form": ">=2.1,<2.3-dev",
-                "symfony/framework-bundle": ">=2.1,<2.3-dev",
-                "symfony/security-bundle": ">=2.1,<2.3-dev"
+                "php": ">=5.3.2"
             },
             "require-dev": {
-                "doctrine/doctrine-bundle": "*",
-                "swiftmailer/swiftmailer": "*",
-                "symfony/validator": "2.1.*",
-                "symfony/yaml": "2.1.*",
-                "twig/twig": "*",
-                "willdurand/propel-typehintable-behavior": "dev-master"
+                "symfony/framework-bundle": "2.2.*",
+                "symfony/security-bundle": "2.2.*"
             },
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "2.2.x-dev"
                 }
             },
             "autoload": {
                 "psr-0": {
-                    "FOS\\UserBundle": ""
+                    "Escape\\WSSEAuthenticationBundle": ""
                 }
             },
             "notification-url": "http://packagist.org/downloads/",
@@ -642,25 +635,22 @@
             ],
             "authors": [
                 {
-                    "name": "Christophe Coevoet",
-                    "email": "stof@notk.org"
+                    "name": "David Joos",
+                    "email": "david@escapestudios.com"
                 },
                 {
-                    "name": "Thibault Duplessis",
-                    "email": "thibault.duplessis@gmail.com",
-                    "homepage": "http://ornicar.github.com"
-                },
-                {
-                    "name": "FriendsOfSymfony Community",
-                    "homepage": "https://github.com/friendsofsymfony/FOSUserBundle/contributors"
+                    "name": "Community contributors",
+                    "homepage": "https://github.com/escapestudios/EscapeWSSEAuthenticationBundle/graphs/contributors"
                 }
             ],
-            "description": "Symfony FOSUserBundle",
-            "homepage": "http://friendsofsymfony.github.com",
+            "description": "Symfony2 bundle to implement WSSE authentication",
+            "homepage": "https://github.com/escapestudios/EscapeWSSEAuthenticationBundle",
             "keywords": [
-                "User management"
+                "Authentication",
+                "bundle",
+                "wsse"
             ],
-            "time": "2013-04-27 12:31:50"
+            "time": "2013-03-25 09:53:05"
         },
         {
             "name": "guzzle/guzzle",
@@ -1904,7 +1894,7 @@
     ],
     "minimum-stability": "alpha",
     "stability-flags": {
-        "friendsofsymfony/user-bundle": 20
+        "escapestudios/wsse-authentication-bundle": 20
     },
     "platform": {
         "php": ">=5.3.3"

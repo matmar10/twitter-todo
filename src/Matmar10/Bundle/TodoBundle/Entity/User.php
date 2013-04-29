@@ -3,13 +3,14 @@
 namespace Matmar10\Bundle\TodoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use FOS\UserBundle\Entity\User as BaseUser;
+use Serializable;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="fos_user")
+ * @ORM\Entity(repositoryClass="Matmar10\Bundle\TodoBundle\Entity\UserRepository")
+ * @ORM\Table(name="user")
  */
-class User extends BaseUser
+class User implements UserInterface /*, Serializable */
 {
     /**
      * @ORM\Id
@@ -19,17 +20,22 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * ORM\Column(type="string", length=32, unique=true, nullable=false)
+     * @ORM\Column(type="string", length=32)
      */
-    protected $username;
+    protected $salt;
 
     /**
-     * ORM\Column(type="string", length=20, unique=true, nullable=false)
+     * @ORM\Column(type="string", length=40, nullable=true)
+     */
+    protected $password;
+
+    /**
+     * @ORM\Column(type="integer", unique=true, nullable=false)
      */
     protected $twitterId;
 
     /**
-     * ORM\Column(type="integer", unique=true, nullable=false)
+     * @ORM\Column(type="string", length=20, unique=true, nullable=false)
      */
     protected $twitterScreenName;
 
@@ -39,6 +45,12 @@ class User extends BaseUser
      */
     protected $twitterAuth;
 
+    public function __construct()
+    {
+        $this->isActive = true;
+        $this->salt = md5(uniqid(null, true));
+    }
+
     public function setId($id)
     {
         $this->id = $id;
@@ -47,6 +59,26 @@ class User extends BaseUser
     public function getId()
     {
         return $this->id;
+    }
+
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+    }
+
+    public function getSalt()
+    {
+        return $this->salt;
     }
 
     public function setTwitterAuth($twitterAuth)
@@ -81,11 +113,48 @@ class User extends BaseUser
 
     public function setUsername($username)
     {
-        $this->username = $username;
+        $this->twitterScreenName = $username;
     }
 
     public function getUsername()
     {
-        return $this->username;
+        return $this->twitterScreenName;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRoles()
+    {
+        return array('ROLE_AUTHENTICATED_USER');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials()
+    {
+        $this->twitterAuth = null;
+    }
+
+    public function isEqualTo(UserInterface $user)
+    {
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        if ($this->password !== $user->getPassword()) {
+            return false;
+        }
+
+        if ($this->getSalt() !== $user->getSalt()) {
+            return false;
+        }
+
+        if ($this->twitterScreenName !== $user->getUsername()) {
+            return false;
+        }
+
+        return true;
     }
 }

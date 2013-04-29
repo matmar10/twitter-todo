@@ -1,40 +1,103 @@
 <?php
 
-namespace Matmar10\Bundle\TodoBundle\Service;
+namespace Matmar10\Bundle\TodoBundle\Security\User;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityNotFoundException;
-use FOS\UserBundle\Doctrine\UserManager;
 use Guzzle\Http\Client;
 use Guzzle\Http\QueryString;
 use Guzzle\Plugin\Oauth\OauthPlugin;
 use Matmar10\Bundle\TodoBundle\Entity\TwitterAuth;
-use Matmar10\Bundle\Todobundle\Security\Authentication\Provider\WsseProvider;
+use Matmar10\Bundle\TodoBundle\Entity\User;
 use RuntimeException;
-use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
-/**
- * @see https://dev.twitter.com/docs/auth/implementing-sign-twitter
- */
-class TwitterAuthService
+class WebserviceUserProvider implements UserProviderInterface
 {
 
-
     protected static $doctrineRegistry;
-
-    protected static $userProvider;
 
     protected static $twitterAuthUri;
 
     public function __construct(
         Registry $doctrineRegistry,
-        WsseProvider $userProvider,
         $twitterAuthenticateUri = 'https://api.twitter.com/oauth/authenticate'
     )
     {
         self::$doctrineRegistry = $doctrineRegistry;
-        self::$userProvider = $userProvider;
         self::$twitterAuthUri = $twitterAuthenticateUri;
+    }
+
+    public function loadUserByUsername($username)
+    {
+
+        $user = self::$doctrineRegistry
+            ->getRepository('Matmar10TodoBundle:User')
+            ->findOneByTwitterScreenName($username);
+
+        if(!$user) {
+            throw new UsernameNotFoundException();
+        }
+
+        return $user;
+    }
+
+    public function loadUserFromXAuthentication($xAuthenticationToken)
+    {
+        $user = self::$doctrineRegistry
+            ->getRepository('Matmar10TodoBundle:User')
+            ->findOneByTwitterAuthInternalToken($xAuthenticationToken);
+
+
+        if(!$user) {
+            throw new UsernameNotFoundException();
+        }
+
+        return $user;
+    }
+
+    public function refreshUser(UserInterface $user)
+    {
+        if (!$user instanceof User) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
+        }
+
+        return $this->loadUserByUsername($user->getUsername());
+    }
+
+    public function supportsClass($class)
+    {
+        return 'Matmar10\Bundle\TodoBundle\Security\User\WebserviceUser' === $class;
+    }
+
+    public function refreshTwitterAuth(User $user, TwitterAuth $twitterAuth)
+    {
+        $twitterAuth->setInternalToken(TwitterAuth::generateUuid());
+        $user->setTwitterAuth($twitterAuth);
+
+        $em = self::$doctrineRegistry->getManagerForClass(get_class($user));
+        $em->merge($user);
+        $em->flush();
+        return $user;
+    }
+
+    public function create($twitterId, $twitterScreenName, TwitterAuth $twitterAuth)
+    {
+        $user = new User();
+        $user->setTwitterId($twitterId);
+        $user->setTwitterScreenName($twitterScreenName);
+
+        $twitterAuth->setInternalToken(TwitterAuth::generateUuid());
+        $user->setTwitterAuth($twitterAuth);
+
+        $em = self::$doctrineRegistry->getManagerForClass(get_class($user));
+        $em->persist($user);
+        $em->flush();
+
+        return $user;
     }
 
     public function processAuthCallback($oauthToken, $oauthVerifier)
@@ -57,11 +120,10 @@ class TwitterAuthService
         $twitterScreenName = $resultParams->get('screen_name');
 
         try {
-            $user = self::$userProvider->loadUserByUsername($twitterScreenName);
-            // attach the latest Twitter Oauth session
-            $user = self::$userProvider->refreshTwitterAuth($user, $twitterAuth);
-        } catch(Exception $e) {
-            $user = self::$userProvider->create($twitterUserId, $twitterScreenName, $twitterAuth);
+            $user = $this->loadUserByUsername($twitterScreenName);
+            $user = $this->refreshTwitterAuth($user, $twitterAuth);
+        } catch(UsernameNotFoundException $e) {
+            $user = $this->create($twitterUserId, $twitterScreenName, $twitterAuth);
         }
 
         return $user;
@@ -159,4 +221,7 @@ class TwitterAuthService
     {
         return self::$doctrineRegistry->getManagerForClass(get_class($entity));
     }
+
+
+
 }

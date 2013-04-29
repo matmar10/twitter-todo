@@ -1,18 +1,32 @@
 
 parameters:
+
     matmar10_todo.twitter_auth_service.class: Matmar10\Bundle\Todobundle\Service\TwitterAuthService
-    matmar10_todo.account_service.class: Matmar10\Bundle\Todobundle\Service\AccountService
+
+    matmar10_todo.webservice_user_provider.class:  Matmar10\Bundle\Todobundle\Security\User\WebserviceUserProvider
+
+    matmar10_todo.wsse.security.authentication.provider.class: Matmar10\Bundle\Todobundle\Security\Authentication\Provider\WsseProvider
+
+    matmar10_todo.wsse.security.authentication.listener.class: Matmar10\Bundle\Todobundle\Security\Firewall\WsseListener
 
 services:
-    matmar10_todo.twitter_auth_service:
-        class: %matmar10_todo.twitter_auth_service.class%
+#    matmar10_todo.twitter_auth_service:
+#        class: %matmar10_todo.twitter_auth_service.class%
+#        arguments:
+#            - @doctrine
+#            - @matmar10_todo.webservice_user_provider
+#            - https://api.twitter.com/oauth/authenticate
+
+    matmar10_todo.webservice_user_provider:
+        class: %matmar10_todo.webservice_user_provider.class%
         arguments:
             - @doctrine
             - https://api.twitter.com/oauth/authenticate
 
+    matmar10_todo.wsse.security.authentication.provider:
+        class:  %matmar10_todo.wsse.security.authentication.provider.class%
+        arguments: [ "", "%kernel.cache_dir%/security/nonces" ]
 
-    matmar10_todo.account_service:
-        class: %matmar10_todo.twitter_auth_service.class%
-        arguments:
-            - @fos_user.user_manager
-            - @doctrine
+    matmar10_todo.wsse.security.authentication.listener:
+        class:  %matmar10_todo.wsse.security.authentication.listener.class%
+        arguments: [ @security.context, @security.authentication.manager, @matmar10_todo.webservice_user_provider ]
