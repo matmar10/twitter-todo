@@ -14,6 +14,15 @@ angular.module('taskServices', ['ngResource']).
 */
 
 function TodoController($scope) {
+
+    var _recalculate = function() {
+        $scope.remaining = $scope.todos.length;
+        angular.forEach($scope.todos, function(todo) {
+            if(todo.done) {
+                $scope.remaining--;
+            }
+        });
+    };
 /*
     $http.get('/api/tasks').success(function(data) {
         $scope.todos = data;
@@ -22,22 +31,21 @@ function TodoController($scope) {
     // initialize controller's model
     $scope.todos = [
         {
-            text: "learn Angular.js",
+            text: "Meet the ShopSavvy team.",
             done: false
         },
         {
-            text: "build Angular app",
+            text: "Build a sample Angular app.",
             done: false
         },
         {
-            text: "show off Angular app",
+            text: "Make awesome new ShopSavvy web product.",
             done: false
         }
     ];
 
     // Define member functions
     $scope.addTodo = function() {
-        window.console.log(this);
         $scope.todos.push({
             text: this.todoText,
             done: false
@@ -46,13 +54,21 @@ function TodoController($scope) {
         $scope.todoText = "";
     };
 
-    $scope.recalc = function() {
-        $scope.remaining = $scope.todos.length;
-        angular.forEach($scope.todos, function(todo) {
-            if(todo.done) {
-                $scope.remaining--;
-            }
-        });
+    $scope.handleCompleted = function($todo) {
+        _recalculate();
+        if($todo.done) {
+            $.ajax({
+                data: "Finished task: " + $todo.text + "",
+                dataType: 'json',
+                type: 'POST',
+                url: '/api/tweet'
+            }).done(function(response) {
+                // tweet was OK
+            }).fail(function(response) {
+                // tweet failed
+            });
+        }
+
     };
 
     $scope.removeDone = function() {
@@ -67,5 +83,5 @@ function TodoController($scope) {
 
     // call recalc once to update the model's 'remaining' value
     // Note: this needs to be called after definition
-    $scope.recalc();
+    _recalculate();
 }

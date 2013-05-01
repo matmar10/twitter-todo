@@ -24,7 +24,7 @@ class WebserviceUserProvider implements UserProviderInterface
 
     public function __construct(
         Registry $doctrineRegistry,
-        $twitterAuthenticateUri = 'https://api.twitter.com/oauth/authenticate'
+        $twitterAuthenticateUri = 'https://api.twitter.com/oauth/authorize'
     )
     {
         self::$doctrineRegistry = $doctrineRegistry;
@@ -190,8 +190,8 @@ class WebserviceUserProvider implements UserProviderInterface
         $responseString = $response->getBody(true);
         $responseParams = QueryString::fromString($responseString);
 
-        // $twitterAuth->setOauthToken($responseParams->get('oauth_token'));
-        // $twitterAuth->setOauthTokenSecret($responseParams->get('oath_token_secret'));
+        $twitterAuth->setOauthToken($responseParams->get('oauth_token'));
+        $twitterAuth->setOauthTokenSecret($responseParams->get('oauth_token_secret'));
 
         $em = $this->getManager($twitterAuth);
         $em->merge($twitterAuth);

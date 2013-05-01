@@ -23,7 +23,7 @@ class TwitterService
         self::$userProvider = $userProvider;
     }
 
-    public function tweet($message)
+    public function tweet($message, $rawJsonResponse = true)
     {
 
         $user = self::$securityContext->getToken()->getUser();
@@ -36,10 +36,11 @@ class TwitterService
             'consumer_key'    => 'vdppViIZVmHZdFQaS4CzQ',
             'consumer_secret' => 'UnNv6fRqTpvxX3Jv7z8sNWtLkkgGV40165ekgVzsTo',
             'token' => $twitterAuth->getOauthToken(),
+            'token_secret' => $twitterAuth->getOauthTokenSecret(),
         ));
 
         $client->addSubscriber($oauth);
-        try {
+
         $response = $client->post('statuses/update.json')
             ->addPostFields(array(
                 'status' => $message,
@@ -51,13 +52,12 @@ class TwitterService
         }
 
         $responseString = $response->getBody(true);
-        $responseData = json_decode($responseString);
-        } catch(\Exception $e) {
-            echo "<pre>";
-            print_r($e->getMessage());
-            echo "</pre>";
-            die();
-        }
-        return $responseData;
+
+
+            if($rawJsonResponse) {
+                return $responseString;
+            }
+
+        return json_decode($rawJsonResponse);
     }
 }

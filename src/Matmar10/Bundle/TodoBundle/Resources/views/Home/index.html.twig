@@ -42,7 +42,7 @@
                 <li>
                     <form class="form inline-form">
                         <label ng-for="todo.id" ng-class="'checkbox done ' + todo.done">
-                            <input ng-id="todo.id" type="checkbox" name="done" ng-model="todo.done" ng-click="recalc()" />
+                            <input ng-id="todo.id" type="checkbox" name="done" ng-model="todo.done" ng-click="handleCompleted(todo)" />
                             {{todo.text}}
                         </label>
                     </form>
