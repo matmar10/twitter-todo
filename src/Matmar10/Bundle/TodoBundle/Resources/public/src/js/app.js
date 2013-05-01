@@ -1,17 +1,3 @@
-/*
-angular.module('taskServices', ['ngResource']).
-    factory('Task', function ($resource) {
-        return $resource('/api/task/:id', {}, {
-            query:{
-                method:'GET',
-                params:{
-                    phoneId:'phones'
-                },
-                isArray: true
-            }
-        });
-    });
-*/
 
 function TodoController($scope) {
 
@@ -23,11 +9,7 @@ function TodoController($scope) {
             }
         });
     };
-/*
-    $http.get('/api/tasks').success(function(data) {
-        $scope.todos = data;
-    });
-*/
+
     // initialize controller's model
     $scope.todos = [
         {

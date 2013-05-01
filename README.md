@@ -3,16 +3,47 @@ MatMar10 TODO Twitter Demo
 
 Overview
 --------
+This is a social task applicastion that tweets tasks when you check them off.
 
+What it Has
+----------
+* Login or Register with Twitter
+* Create tasks in your browser
+* Tasks are automatically tweeted
+* Bootstrap UI makes thinks look decent
+* Authentication uses a request listener pattern; other types of authentication providers or error listeners can be added 
+
+What is Missing
+---------------
+* Tasks are not persisted
+* No logout
+* No checking if Twitter session is still valid
+* No validation to speak of
+* Much, much more. 
 
 Installation Instructions
 -------------------------
-
+1. Download to a directory, e.g. ::install_dir::
+2. Set up a new Apache VirtualHost
+3. Point the new VirtualHost to ::install_dir::
+4. Download composer.phar from http://getcomposer.org/download/ to ::install_dir::
+5. Navigate to ::install_dir::
+6. Run `php composer.phar install`
+7. Point your browser at the honstame you set up in Apache
 
 
 Testing Notes
 -------------
 
+Tested only in Chrome v26 on OSX
+
+No unit tests have been written.
+
+Other Notes
+----------
+There is a lot of cruft under the hood. Generally TODOs have been put in the code where stuff is crusty.
+
+NOTE: Presently tasks are not persisted. Only authentication is persisted. 
 
 
 Problem Statement

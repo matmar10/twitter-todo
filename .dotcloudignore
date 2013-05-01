@@ -1,0 +1,24 @@
+
+# Mac
+.DS_Store
+
+# Bootstrap
+app/bootstrap*
+
+# Symfony directories
+vendor/*
+*/logs/*
+*/cache/*
+web/uploads/*
+web/bundles/*
+
+# Local configuration files
+app/config/environment_dev.json
+
+# IDE
+bitcoinbymobile/
+.idea/
+
+#VCS
+.git/
+

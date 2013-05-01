@@ -2,7 +2,7 @@
 <html lang="en" ng-app>
 <head>
 
-    <title>{% block title %}MatMar10 TODO Demo{% endblock title %}</title>
+    <title>{% block title %}Social Task List{% endblock title %}</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -25,7 +25,7 @@
         <div class="navbar navbar-static-top">
             <div class="navbar-inner">
                 <div class="container">
-                    <a class="brand" href="{{ path('homepage') }}">Matmar10 Task List</a>
+                    <a class="brand" href="{{ path('homepage') }}">Social Task List</a>
                     {% if menuItems is defined %}
                     <ul class="nav" id="main-menu-left">
                         {% for path_id, display_name in menuItems %}

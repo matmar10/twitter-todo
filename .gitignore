@@ -1,4 +1,6 @@
 
+#dot cloud
+.dotcloud
 
 # composer should be installed locally
 composer.phar

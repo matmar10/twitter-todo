@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# set -e makes the script exit on the first error
+set -e
+# set -x will add debug trace information to all of your commands
+set -x
+
+# Install the vendor libraries
+#
+# The ~/code directory, where your application lives on dotCloud, is erased by
+# the newer version of your code, each time you push.
+# So, we would need to reinstall all the vendor libraries if we left them
+# inside ~/code.
+# That's why we install the vendor libraries outside of ~/code and create a
+# symlink to it.
+symfony_install_vendor() {
+    local vendor_directory=$HOME/vendor/
+
+    [ -d $vendor_directory ] || mkdir -p $vendor_directory
+
+    rm -rf ~/code/vendor
+    ln -s $vendor_directory ~/code/vendor
+
+    php ~/code/app/composer.phar --working-dir=/home/dotcloud/code/ install
+}
+
+symfony_install_vendor
