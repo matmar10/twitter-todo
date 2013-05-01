@@ -14,20 +14,6 @@ use Symfony\Component\Security\Core\SecurityContext;
 class LoginController extends Controller
 {
 
-
-    /**
-     * @Route("/api/foo", name="api_test")
-     * @Template()
-     */
-    public function apiAction()
-    {
-        if (false === $this->get('security.context')->isGranted('ROLE_AUTHENTICATED_USER')) {
-            throw new AccessDeniedException();
-        }
-
-        return array();
-    }
-
     /**
      * @Route("/login", name="login")
      * @Template()
@@ -73,20 +59,21 @@ class LoginController extends Controller
         $response = new RedirectResponse($homeUri);
 
         $xAuthToken = $user->getTwitterAuth()->getInternalToken();
-        $response->headers->set('X-Authorization', $xAuthToken); // for convenient access
+
+        $response->headers->set('X-Authentication', $xAuthToken); // for convenient access
 
         // this will get picked up in the auth listener on subsequent requests
-        $response->headers->setCookie(new Cookie('X-Authorization', $xAuthToken));
+        $response->headers->setCookie(new Cookie('X-Authentication', $xAuthToken));
         return $response;
     }
 
 
     /**
-     * @Route("logout", name="logout")
+     * @Route("/logout", name="logout")
      */
     public function logoutAction()
     {
-        throw new \Exception("TODO: UNIMPLEMENTED");
+
     }
 
     /**

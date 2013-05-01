@@ -3,9 +3,12 @@
 namespace Matmar10\Bundle\TodoBundle\Security\Authentication\Token;
 
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
+use  Matmar10\Bundle\TodoBundle\Entity\TwitterAuth;
 
 class WsseUserToken extends AbstractToken
 {
+
+    protected $twitterAuth;
 
     public function __construct(array $roles = array())
     {

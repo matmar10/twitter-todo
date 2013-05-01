@@ -1,7 +1,7 @@
 
 parameters:
 
-    matmar10_todo.twitter_auth_service.class: Matmar10\Bundle\Todobundle\Service\TwitterAuthService
+    matmar10_todo.twitter_service.class: Matmar10\Bundle\Todobundle\Service\TwitterService
 
     matmar10_todo.webservice_user_provider.class:  Matmar10\Bundle\Todobundle\Security\User\WebserviceUserProvider
 
@@ -9,13 +9,15 @@ parameters:
 
     matmar10_todo.wsse.security.authentication.listener.class: Matmar10\Bundle\Todobundle\Security\Firewall\WsseListener
 
+    matmar10_todo.wsse.security.authentication.access_denied_listener.class: Matmar10\Bundle\Todobundle\Security\Firewall\AccessDeniedListener
+
+
 services:
-#    matmar10_todo.twitter_auth_service:
-#        class: %matmar10_todo.twitter_auth_service.class%
-#        arguments:
-#            - @doctrine
-#            - @matmar10_todo.webservice_user_provider
-#            - https://api.twitter.com/oauth/authenticate
+    matmar10_todo.twitter_service:
+        class: %matmar10_todo.twitter_service.class%
+        arguments:
+            - @security.context
+            - @matmar10_todo.webservice_user_provider
 
     matmar10_todo.webservice_user_provider:
         class: %matmar10_todo.webservice_user_provider.class%
@@ -30,3 +32,9 @@ services:
     matmar10_todo.wsse.security.authentication.listener:
         class:  %matmar10_todo.wsse.security.authentication.listener.class%
         arguments: [ @security.context, @security.authentication.manager, @matmar10_todo.webservice_user_provider ]
+
+    matmar10_todo.wsse.security.authentication.access_denied_listener:
+        class:  %matmar10_todo.wsse.security.authentication.access_denied_listener.class%
+        arguments: [ @router ]
+        tags:
+          - { name: kernel.event_listener, event: kernel.exception, method: onAccessDeniedException }

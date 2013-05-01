@@ -2,12 +2,12 @@ security:
 
     firewalls:
         wsse_secured:
-            # pattern:   /api/.*
-            # pattern:   /.*
-            pattern: ^/
+            pattern: ^/.*
             anonymous: ~
             wsse:      true
-            # wsse:      { nonce_dir: null, lifetime: 300, realm: "Secured API", profile: "UsernameToken" }
+            logout:
+                path:   /logout
+                target: /
 
     access_control:
 
@@ -28,12 +28,17 @@ security:
             role: IS_AUTHENTICATED_ANONYMOUSLY
 
         -
-            path: ^/api/.*
-            role: ROLE_AUTHENTICATED_USER
+            path: ^/login/authenticate-with-twitter
+            role: IS_AUTHENTICATED_ANONYMOUSLY
+
+        -
+            path: ^/login/check-twitter-authentication
+            role: IS_AUTHENTICATED_ANONYMOUSLY
 
         -
             path: ^/
             role: ROLE_AUTHENTICATED_USER
+
 
     providers:
         default_provider:

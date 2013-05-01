@@ -11,6 +11,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\Authentication\AuthenticationManagerInterface;
+use Symfony\Component\Security\Core\Exception\InsufficientAuthenticationException;
 
 class WsseListener implements ListenerInterface
 {
@@ -56,15 +57,12 @@ class WsseListener implements ListenerInterface
         try {
             $authToken = $this->authenticationManager->authenticate($token);
             $this->securityContext->setToken($authToken);
-
         } catch (AuthenticationException $failed) {
 
             // TODO: log something here
 
-            // To deny the authentication clear the token. This will redirect to the login page.
-            // $this->securityContext->setToken(null);
-            // return;
-
+            // To deny the authentication clear the token
+            $this->securityContext->setToken(null);
             // Deny authentication with a '403 Forbidden' HTTP response
             $response = new Response();
             $response->setStatusCode(403);

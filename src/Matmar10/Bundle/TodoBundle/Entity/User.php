@@ -40,7 +40,7 @@ class User implements UserInterface /*, Serializable */
     protected $twitterScreenName;
 
     /**
-     * @ORM\OneToOne(targetEntity="TwitterAuth")
+     * @ORM\OneToOne(targetEntity="TwitterAuth", cascade={"all"}, fetch="EAGER")
      * @ORM\JoinColumn(name="twitter_auth_id", referencedColumnName="id")
      */
     protected $twitterAuth;

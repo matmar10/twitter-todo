@@ -7,3 +7,5 @@ matmar10_todo:
     resource: "@Matmar10TodoBundle/Controller"
     type:     annotation
 
+logout:
+    path:   /logout

@@ -45,12 +45,30 @@ class WebserviceUserProvider implements UserProviderInterface
         return $user;
     }
 
+    public function getTwitterAuthForUser(User $user)
+    {
+
+        $twitterAuth = $user->getTwitterAuth();
+
+        if(is_null($twitterAuth)) {
+            $user = self::$doctrineRegistry
+                        ->getRepository('Matmar10TodoBundle:User')
+                        ->findOneById($user->getId());
+            if(!$user) {
+                throw new UsernameNotFoundException();
+            }
+            $twitterAuth = $user->getTwitterAuth();
+        }
+
+        return $twitterAuth;
+    }
+
+
     public function loadUserFromXAuthentication($xAuthenticationToken)
     {
         $user = self::$doctrineRegistry
             ->getRepository('Matmar10TodoBundle:User')
             ->findOneByTwitterAuthInternalToken($xAuthenticationToken);
-
 
         if(!$user) {
             throw new UsernameNotFoundException();
@@ -70,7 +88,7 @@ class WebserviceUserProvider implements UserProviderInterface
 
     public function supportsClass($class)
     {
-        return 'Matmar10\Bundle\TodoBundle\Security\User\WebserviceUser' === $class;
+        return 'Matmar10\Bundle\TodoBundle\Entity\User' === $class;
     }
 
     public function refreshTwitterAuth(User $user, TwitterAuth $twitterAuth)
@@ -78,7 +96,7 @@ class WebserviceUserProvider implements UserProviderInterface
         $twitterAuth->setInternalToken(TwitterAuth::generateUuid());
         $user->setTwitterAuth($twitterAuth);
 
-        $em = self::$doctrineRegistry->getManagerForClass(get_class($user));
+        $em = $this->getManager($user);
         $em->merge($user);
         $em->flush();
         return $user;
@@ -93,7 +111,7 @@ class WebserviceUserProvider implements UserProviderInterface
         $twitterAuth->setInternalToken(TwitterAuth::generateUuid());
         $user->setTwitterAuth($twitterAuth);
 
-        $em = self::$doctrineRegistry->getManagerForClass(get_class($user));
+        $em = $this->getManager($user);
         $em->persist($user);
         $em->flush();
 
@@ -123,6 +141,7 @@ class WebserviceUserProvider implements UserProviderInterface
             $user = $this->loadUserByUsername($twitterScreenName);
             $user = $this->refreshTwitterAuth($user, $twitterAuth);
         } catch(UsernameNotFoundException $e) {
+            // TODO: this is a hack job and would normally be coupled with a specific new user experience
             $user = $this->create($twitterUserId, $twitterScreenName, $twitterAuth);
         }
 
@@ -139,13 +158,14 @@ class WebserviceUserProvider implements UserProviderInterface
     {
         $registry = self::$doctrineRegistry->getRepository('Matmar10TodoBundle:TwitterAuth');
         $twitterAuth = $registry->findOneByOauthToken($oauthToken);
-
+        if(!$twitterAuth) {
+            throw new EntityNotFoundException("No TwitterAuth found for oauthToken '" + $oauthToken + "'.");
+        }
         return $twitterAuth;
     }
 
     protected function upgradeOauthAccessToken(TwitterAuth $twitterAuth)
     {
-
         $client = new Client('https://api.twitter.com');
 
         // TODO: these are just for dev and must be moved out into config
@@ -154,14 +174,15 @@ class WebserviceUserProvider implements UserProviderInterface
             'consumer_secret' => 'UnNv6fRqTpvxX3Jv7z8sNWtLkkgGV40165ekgVzsTo',
             'token' => $twitterAuth->getOauthToken(),
         ));
-
         $client->addSubscriber($oauth);
 
         $response = $client->post('/oauth/access_token')
             ->addPostFields(array(
                 'oauth_verifier' => $twitterAuth->getOauthVerifier(),
             ))->send();
+
         $responseCode = $response->getStatusCode();
+
         if(200 !== $responseCode) {
             throw new RuntimeException("Request for Twitter Oauth Request Token failed with response code " . $responseCode . " (response code 200 expected).");
         }
@@ -169,6 +190,12 @@ class WebserviceUserProvider implements UserProviderInterface
         $responseString = $response->getBody(true);
         $responseParams = QueryString::fromString($responseString);
 
+        // $twitterAuth->setOauthToken($responseParams->get('oauth_token'));
+        // $twitterAuth->setOauthTokenSecret($responseParams->get('oath_token_secret'));
+
+        $em = $this->getManager($twitterAuth);
+        $em->merge($twitterAuth);
+        $em->flush();
         return $responseParams;
     }
 
