@@ -16,7 +16,6 @@ web/bundles/*
 app/config/environment_dev.json
 
 # IDE
-bitcoinbymobile/
 .idea/
 
 #VCS

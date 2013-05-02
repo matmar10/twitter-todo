@@ -15,13 +15,17 @@ set -x
 # symlink to it.
 symfony_install_vendor() {
     local vendor_directory=$HOME/vendor/
+    local composer=./composer.phar
 
     [ -d $vendor_directory ] || mkdir -p $vendor_directory
 
     rm -rf ~/code/vendor
     ln -s $vendor_directory ~/code/vendor
 
-    php ~/code/app/composer.phar --working-dir=/home/dotcloud/code/ install
+    cd ../code/
+    [ -f $composer ] || curl -s https://getcomposer.org/installer | php -- --install-dir=`pwd`
+    php composer.phar update --prefer-source
 }
 
 symfony_install_vendor
+

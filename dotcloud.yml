@@ -1,6 +1,7 @@
 www:
   type: php
   approot: web
+  postbuild: /home/dotcloud/code/bin/dotcloud-postbuild
 
 db:
   type: mysql

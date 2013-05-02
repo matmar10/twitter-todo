@@ -29,8 +29,10 @@ Installation Instructions
 4. Download composer.phar from http://getcomposer.org/download/ to ::install_dir::
 5. Navigate to ::install_dir::
 6. Run `php composer.phar install`
-7. Point your browser at the honstame you set up in Apache
-
+7. Update the database settings within app/config/parameters.yml such that the user will hve CREATE privelege 
+8. Run `php app/console doctrine:database:create`
+9. Run `php app/console doctrine:schema:create`
+10. Point your browser at the hostname you set up in Apache and enjoy
 
 Testing Notes
 -------------
